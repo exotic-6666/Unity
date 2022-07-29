@@ -11,4 +11,4 @@ Feel free to use them without credit!
 - Sprinting
 - Crouching
 - Walking
-- 180 DEG up and down
+- Mouse Lock 180 Deg
