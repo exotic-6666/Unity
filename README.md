@@ -12,3 +12,9 @@ Feel free to use them without credit!
 - Crouching
 - Walking
 - Mouse Lock 180 Deg
+
+
+## DiscordRPC
+
+- Discord Rich Precense for unity
+- Requires Discord C# SDK
