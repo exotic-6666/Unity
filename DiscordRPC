@@ -9,7 +9,7 @@ public class DiscordRPC : MonoBehaviour
 
     void Start()
     {
-        discord = new Discord.Discord(1004368076982210690, (System.UInt64)Discord.CreateFlags.Default);
+        discord = new Discord.Discord(clientID, (System.UInt64)Discord.CreateFlags.Default);
         var activityManager = discord.GetActivityManager();
         var activity = new Discord.Activity {
             State = "Playing in Beta",
@@ -21,9 +21,9 @@ public class DiscordRPC : MonoBehaviour
             Assets =
             {
                 LargeImage = "logo",
-                LargeText = "Unit65",
+                LargeText = "Hover Text",
                 SmallImage = "logo",
-                SmallText = "Unit65",
+                SmallText = "Hover Text",
             },
         };
         activityManager.UpdateActivity(activity, (res) => {
