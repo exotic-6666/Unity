@@ -6,10 +6,10 @@ public class PlayerController : MonoBehaviour
 {
     public bool CanMove { get; private set; } = true;
     public bool IsSprinting => canSprint && Input.GetKey(sprintKey);
-    private bool ShouldJump => Input.GetKeyDown(jumpKey) && characterController.isGrounded;
-    private bool ShouldLeanLeft  => canUseLean && Input.GetKeyDown(leanLeft) && characterController.isGrounded;
-    private bool ShouldLeanRight  => canUseLean && Input.GetKeyDown(leanRight) && characterController.isGrounded;
-    private bool ShouldCrouch => Input.GetKeyDown(crouchKey) && !duringCrouchAnimation && characterController.isGrounded;
+    private bool ShouldJump => Input.GetKeyDown(jumpKey) && characterController.isGrounded && !isCrouching;
+    private bool ShouldLeanLeft  => canUseLean && Input.GetKey(leanLeft) && characterController.isGrounded;
+    private bool ShouldLeanRight  => canUseLean && Input.GetKey(leanRight) && characterController.isGrounded;
+    private bool ShouldCrouch => Input.GetKey(crouchKey) && !duringCrouchAnimation && characterController.isGrounded;
 
     [Header("Functional Options")]
     [SerializeField] private bool canSprint = true;
@@ -22,7 +22,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
     [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
-
+    [SerializeField] private KeyCode leanLeft = KeyCode.Q;
+    [SerializeField] private KeyCode leanRight = KeyCode.E;
+    
     [Header("Leaning")]
     public Transform leanPivot;
     [SerializeField] private float currentLean;
@@ -30,10 +32,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float leanAngle;
     [SerializeField] public float leanSmoothning;
     [SerializeField] private float leanVelocity;
-    [SerializeField] private bool isLeaningLeft;
-    [SerializeField] private bool isLeaningRight;
-    [SerializeField] private KeyCode leanLeft = KeyCode.Q;
-    [SerializeField] private KeyCode leanRight = KeyCode.E;
 
     [Header("Movement Parameters")]
     [SerializeField] private float walkSpeed = 3.0f;
@@ -48,7 +46,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Jumping Parameters")]
     [SerializeField] private float jumpForce = 8.0f;
-    [SerializeField] private float gravity = 30.0f;
+    [SerializeField] private float gravity = 20.0f;
 
     [Header("Crouch Paramaters")]
     [SerializeField] private float crouchHeight = 0.5f;
@@ -190,11 +188,11 @@ public class PlayerController : MonoBehaviour
     private void HandleLeaning()
     {
 
-        if(isLeaningLeft)
+        if(ShouldLeanLeft)
         {
             targetLean = leanAngle;
         } 
-        else if(isLeaningRight)
+        else if(ShouldLeanRight)
         {
             targetLean = -leanAngle;
         }
@@ -205,11 +203,6 @@ public class PlayerController : MonoBehaviour
 
         currentLean = Mathf.SmoothDamp(currentLean, targetLean, ref leanVelocity, leanSmoothning);
 
-        if(ShouldLeanLeft)
-            isLeaningLeft = !isLeaningLeft;
-
-        if(ShouldLeanRight)
-            isLeaningRight = !isLeaningRight;
 
         leanPivot.localRotation = Quaternion.Euler(new Vector3(0, 0, currentLean));
     }
